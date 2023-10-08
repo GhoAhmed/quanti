@@ -35,19 +35,20 @@ class ArticleCommande
     private $prixTVA;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Commande::class, inversedBy="articleCommandes")
+     * @ORM\ManyToOne(targetEntity=Commande::class, inversedBy="articlesCommande")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $commade;
+    private $commande;
 
     /**
-     * @ORM\OneToMany(targetEntity=Article::class, mappedBy="articleCommande", orphanRemoval=true)
+     * @ORM\ManyToOne(targetEntity=Article::class, inversedBy="articlesCommande")
+     * @ORM\JoinColumn(nullable=false)
      */
     private $article;
 
     public function __construct()
     {
-        $this->article = new ArrayCollection();
+        // ...
     }
 
     public function getId(): ?int
@@ -91,45 +92,29 @@ class ArticleCommande
         return $this;
     }
 
-    public function getCommade(): ?Commande
+    public function getCommande(): ?Commande
     {
-        return $this->commade;
+        return $this->commande;
     }
 
-    public function setCommade(?Commande $commade): self
+    public function setCommande(?Commande $commande): self
     {
-        $this->commade = $commade;
+        $this->commande = $commande;
 
         return $this;
     }
 
-    /**
-     * @return Collection<int, Article>
-     */
-    public function getArticle(): Collection
+    public function getArticle(): ?Article
     {
         return $this->article;
     }
 
-    public function addArticle(Article $article): self
+    public function setArticle(?Article $article): self
     {
-        if (!$this->article->contains($article)) {
-            $this->article[] = $article;
-            $article->setArticleCommande($this);
-        }
+        $this->article = $article;
 
         return $this;
     }
 
-    public function removeArticle(Article $article): self
-    {
-        if ($this->article->removeElement($article)) {
-            // set the owning side to null (unless already changed)
-            if ($article->getArticleCommande() === $this) {
-                $article->setArticleCommande(null);
-            }
-        }
-
-        return $this;
-    }
+    // Les autres méthodes et propriétés de la classe, si elles existent, restent inchangées.
 }

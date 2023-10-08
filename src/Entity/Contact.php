@@ -62,12 +62,7 @@ class Contact
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $country;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $zipCode;
+    private $zip;
 
     /**
      * @ORM\OneToMany(targetEntity=Commande::class, mappedBy="contact", orphanRemoval=true)
@@ -180,32 +175,20 @@ class Contact
         return $this;
     }
 
-    public function getCountry(): ?string
+    public function getZip(): ?string
     {
-        return $this->country;
+        return $this->zip;
     }
 
-    public function setCountry(string $country): self
+    public function setZip(string $zip): self
     {
-        $this->country = $country;
-
-        return $this;
-    }
-
-    public function getZipCode(): ?string
-    {
-        return $this->zipCode;
-    }
-
-    public function setZipCode(string $zipCode): self
-    {
-        $this->zipCode = $zipCode;
+        $this->zip = $zip;
 
         return $this;
     }
 
     /**
-     * @return Collection<int, Commande>
+     * @return Collection|Commande[]
      */
     public function getCommandes(): Collection
     {
@@ -225,7 +208,6 @@ class Contact
     public function removeCommande(Commande $commande): self
     {
         if ($this->commandes->removeElement($commande)) {
-            // set the owning side to null (unless already changed)
             if ($commande->getContact() === $this) {
                 $commande->setContact(null);
             }

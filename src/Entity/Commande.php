@@ -46,14 +46,9 @@ class Commande
     private $user;
 
     /**
-     * @ORM\OneToMany(targetEntity=ArticleCommande::class, mappedBy="commade", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity=ArticleCommande::class, mappedBy="commande", orphanRemoval=true)
      */
     private $articleCommandes;
-
-    /**
-     * @ORM\ManyToMany(targetEntity=Article::class, inversedBy="commandes")
-     */
-    private $article;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -84,7 +79,6 @@ class Commande
     public function __construct()
     {
         $this->articleCommandes = new ArrayCollection();
-        $this->article = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -164,7 +158,7 @@ class Commande
     {
         if (!$this->articleCommandes->contains($articleCommande)) {
             $this->articleCommandes[] = $articleCommande;
-            $articleCommande->setCommade($this);
+            $articleCommande->setCommande($this);
         }
 
         return $this;
@@ -174,34 +168,10 @@ class Commande
     {
         if ($this->articleCommandes->removeElement($articleCommande)) {
             // set the owning side to null (unless already changed)
-            if ($articleCommande->getCommade() === $this) {
-                $articleCommande->setCommade(null);
+            if ($articleCommande->getCommande() === $this) {
+                $articleCommande->setCommande(null);
             }
         }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Article>
-     */
-    public function getArticle(): Collection
-    {
-        return $this->article;
-    }
-
-    public function addArticle(Article $article): self
-    {
-        if (!$this->article->contains($article)) {
-            $this->article[] = $article;
-        }
-
-        return $this;
-    }
-
-    public function removeArticle(Article $article): self
-    {
-        $this->article->removeElement($article);
 
         return $this;
     }
