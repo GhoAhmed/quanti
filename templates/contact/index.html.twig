@@ -1,20 +1,35 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello ContactController!{% endblock %}
+{% block title %}Liste des Contacts{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
-
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
-
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ 'C:/Users/AMED/Desktop/Projects/symfony/test/quanti/src/Controller/ContactController.php'|file_link(0) }}">src/Controller/ContactController.php</a></code></li>
-        <li>Your template at <code><a href="{{ 'C:/Users/AMED/Desktop/Projects/symfony/test/quanti/templates/contact/index.html.twig'|file_link(0) }}">templates/contact/index.html.twig</a></code></li>
-    </ul>
-</div>
+    <h1>Liste des Contacts</h1>
+    
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nom du Compte</th>
+                <th>Nom du Contact</th>
+                <th>Pays</th>
+                <th>Ville</th>
+                <th>Code Postal</th>
+                <th>Adresse</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for contact in contacts %}
+                <tr>
+                    <td>{{ contact.ID }}</td>
+                    <td>{{ contact.AccountName }}</td>
+                    <td>{{ contact.ContactName }}</td>
+                    <td>{{ contact.Country }}</td>
+                    <td>{{ contact.City }}</td>
+                    <td>{{ contact.ZipCode }}</td>
+                    <td>{{ contact.AddressLine1 }}{% if contact.AddressLine2 %}, {{ contact.AddressLine2 }}{% endif %}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
 {% endblock %}

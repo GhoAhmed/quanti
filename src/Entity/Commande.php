@@ -75,6 +75,12 @@ class Commande
      */
     private $dateTraitement;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Contact::class, inversedBy="commandes")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $contact;
+
     public function __construct()
     {
         $this->articleCommandes = new ArrayCollection();
@@ -244,6 +250,18 @@ class Commande
     public function setDateTraitement(\DateTimeInterface $dateTraitement): self
     {
         $this->dateTraitement = $dateTraitement;
+
+        return $this;
+    }
+
+    public function getContact(): ?Contact
+    {
+        return $this->contact;
+    }
+
+    public function setContact(?Contact $contact): self
+    {
+        $this->contact = $contact;
 
         return $this;
     }

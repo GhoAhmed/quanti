@@ -1,14 +1,21 @@
-{# commande/index.html.twig #}
-
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    {# Votre contenu HTML ici #}
     <h1>Liste des commandes</h1>
     <ul>
         {% for order in processedOrders %}
-            <li>{{ order.description }}</li>
-            {# Affichez d'autres informations sur la commande ici #}
+            <li>
+                <h2>Commande #{{ order.numCommande }}</h2>
+                <p>Nom du destinataire : {{ order.nomDestinataire }}</p>
+                <p>Adresse de livraison : {{ order.adresseLivraison }}</p>
+                <p>Pays de livraison : {{ order.paysLivraison }}</p>
+                <p>Code postal : {{ order.codePostal }}</p>
+                <p>Ville de livraison : {{ order.villeLivraison }}</p>
+                {# Ajoutez d'autres informations de commande ici selon vos besoins #}
+            </li>
         {% endfor %}
     </ul>
+    <form action="{{ path('get_new_orders') }}" method="get">
+        <button type="submit">Déclencher le flow orders_to_csv</button>
+    </form>
 {% endblock %}

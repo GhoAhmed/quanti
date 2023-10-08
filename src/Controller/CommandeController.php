@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Commande;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpClient\Exception\ClientException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -16,17 +17,22 @@ class CommandeController extends AbstractController
      */
     public function getNewOrders(HttpClientInterface $httpClient): Response
     {
-        // Récupérer les nouvelles commandes depuis l'API e-commerce
-        $newOrders = $this->getNewOrdersFromCommerceAPI($httpClient);
+        try {
+            // Récupérer les nouvelles commandes depuis l'API e-commerce
+            $newOrders = $this->getNewOrdersFromCommerceAPI($httpClient);
 
-        // Stocker les nouvelles commandes en base de données
-        $this->storeNewOrdersInDatabase($newOrders);
+            // Stocker les nouvelles commandes en base de données
+            $this->storeNewOrdersInDatabase($newOrders);
 
-        // Générer un fichier CSV avec les nouvelles commandes
-        $csvData = $this->generateCSVFile($newOrders);
+            // Générer un fichier CSV avec les nouvelles commandes
+            $csvData = $this->generateCSVFile($newOrders);
 
-        // Répondre avec le fichier CSV en tant que réponse HTTP
-        return $this->createCSVResponse($csvData);
+            // Répondre avec le fichier CSV en tant que réponse HTTP
+            return $this->createCSVResponse($csvData);
+        } catch (ClientException $e) {
+            // Gérez l'erreur d'accès à l'API ici, par exemple, en affichant un message d'erreur
+            return new Response('Erreur d\'accès à l\'API : ' . $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 
     /**
@@ -47,7 +53,7 @@ class CommandeController extends AbstractController
     private function getNewOrdersFromCommerceAPI(HttpClientInterface $httpClient): array
     {
         // Utiliser HttpClient pour faire la requête à l'API e-commerce
-        $response = $httpClient->request('GET', 'https://4ebb0152-1174-42f0-ba9b-4d6a69cf93be.mock.pstmn.io/orders', [
+        $response = $httpClient->request('GET', 'https://internshipapi-pylfsebcoa-ew.a.run.app', [
             'headers' => [
                 'x-api-key' => 'PMAK-62642462da39cd50e9ab4ea7-815e244f4fdea2d2075d8966cac3b7f10b',
             ],
@@ -57,33 +63,31 @@ class CommandeController extends AbstractController
         $data = $response->toArray();
         $newOrders = [];
 
-        foreach ($data['SalesOrders'] as $salesOrder) {
+        foreach ($data['results'] as $orderData) {
             $newOrder = [
-                'Amount' => $salesOrder['Amount'],
-                'Currency' => $salesOrder['Currency'],
-                'OrderID' => $salesOrder['OrderID'],
-                'OrderNumber' => $salesOrder['OrderNumber'],
-                'DeliverTo' => [
-                    'ContactName' => $salesOrder['DeliverTo']['ContactName'],
-                    'DeliveryAddress' => $salesOrder['DeliverTo']['DeliveryAddress'],
-                    // ... Ajoutez d'autres champs de livraison si nécessaire
-                ],
+                'Amount' => $orderData['Amount'],
+                'Currency' => $orderData['Currency'],
+                'OrderID' => $orderData['OrderID'],
+                'OrderNumber' => $orderData['OrderNumber'],
+                'DeliverTo' => $orderData['DeliverTo'],
                 'SalesOrderLines' => [],
             ];
 
-            foreach ($salesOrder['SalesOrderLines'] as $salesOrderLine) {
+            foreach ($orderData['SalesOrderLines']['results'] as $salesOrderLineData) {
                 $newOrderLine = [
-                    'Amount' => $salesOrderLine['Amount'],
-                    'Discount' => $salesOrderLine['Discount'],
-                    'Item' => $salesOrderLine['Item'],
-                    'ItemDescription' => $salesOrderLine['ItemDescription'],
-                    'Quantity' => $salesOrderLine['Quantity'],
-                    'UnitCode' => $salesOrderLine['UnitCode'],
-                    'UnitDescription' => $salesOrderLine['UnitDescription'],
-                    'UnitPrice' => $salesOrderLine['UnitPrice'],
-                    'VATAmount' => $salesOrderLine['VATAmount'],
-                    'VATPercentage' => $salesOrderLine['VATPercentage'],
+                    'Amount' => $salesOrderLineData['Amount'],
+                    'Description' => $salesOrderLineData['Description'],
+                    'Discount' => $salesOrderLineData['Discount'],
+                    'Item' => $salesOrderLineData['Item'],
+                    'ItemDescription' => $salesOrderLineData['ItemDescription'],
+                    'Quantity' => $salesOrderLineData['Quantity'],
+                    'UnitCode' => $salesOrderLineData['UnitCode'],
+                    'UnitDescription' => $salesOrderLineData['UnitDescription'],
+                    'UnitPrice' => $salesOrderLineData['UnitPrice'],
+                    'VATAmount' => $salesOrderLineData['VATAmount'],
+                    'VATPercentage' => $salesOrderLineData['VATPercentage'],
                 ];
+
                 $newOrder['SalesOrderLines'][] = $newOrderLine;
             }
 
