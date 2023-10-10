@@ -5,6 +5,8 @@ namespace App\Repository;
 use App\Entity\Commande;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
+
 
 /**
  * @extends ServiceEntityRepository<Commande>
@@ -20,6 +22,7 @@ class CommandeRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Commande::class);
     }
+
 
     public function add(Commande $entity, bool $flush = false): void
     {

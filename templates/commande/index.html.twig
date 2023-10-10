@@ -11,7 +11,15 @@
                 <p>Pays de livraison : {{ order.paysLivraison }}</p>
                 <p>Code postal : {{ order.codePostal }}</p>
                 <p>Ville de livraison : {{ order.villeLivraison }}</p>
-                {# Ajoutez d'autres informations de commande ici selon vos besoins #}
+                <h3>Articles :</h3>
+                <ul>
+                    {% for itemKey, itemDescription in order.items %}
+                        <li>
+                            {{ itemKey }}: {{ itemDescription }}
+                        </li>
+                    {% endfor %}
+                </ul>
+                {# Add other fields you want to display here #}
             </li>
         {% endfor %}
     </ul>

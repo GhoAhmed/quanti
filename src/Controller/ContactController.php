@@ -59,8 +59,7 @@ class ContactController extends AbstractController
             $contact->setAddressLine2($contactData['AddressLine2']);
             $contact->setCity($contactData['City']);
             $contact->setContactName($contactData['ContactName']);
-            $contact->setCountry($contactData['Country']);
-            $contact->setZipCode($contactData['ZipCode']);
+            $contact->setZip($contactData['ZipCode']);
             $contacts[] = $contact;
         }
 
@@ -86,8 +85,7 @@ class ContactController extends AbstractController
             $contact->setAddressLine2($contactData['AddressLine2']);
             $contact->setCity($contactData['City']);
             $contact->setContactName($contactData['ContactName']);
-            $contact->setCountry($contactData['Country']);
-            $contact->setZipCode($contactData['ZipCode']);
+            $contact->setZip($contactData['ZipCode']);
 
             // Assurez-vous d'ajouter le contact à l'EntityManager
             $entityManager->persist($contact);

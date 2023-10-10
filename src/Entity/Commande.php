@@ -1,14 +1,12 @@
 <?php
 
 namespace App\Entity;
-
-use App\Repository\CommandeRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass=CommandeRepository::class)
+ * @ORM\Entity(repositoryClass="App\Repository\CommandeRepository")
  */
 class Commande
 {
@@ -38,12 +36,6 @@ class Commande
      * @ORM\Column(type="array")
      */
     private $items = [];
-
-    /**
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="commandes")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $user;
 
     /**
      * @ORM\OneToMany(targetEntity=ArticleCommande::class, mappedBy="commande", orphanRemoval=true)
@@ -130,18 +122,6 @@ class Commande
     public function setItems(array $items): self
     {
         $this->items = $items;
-
-        return $this;
-    }
-
-    public function getUser(): ?User
-    {
-        return $this->user;
-    }
-
-    public function setUser(?User $user): self
-    {
-        $this->user = $user;
 
         return $this;
     }
