@@ -1,29 +1,38 @@
 {% extends 'base.html.twig' %}
 
+{% block title %}Liste des Commandes{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/orders.css') }}">
+{% endblock %}
+
 {% block body %}
-    <h1>Liste des commandes</h1>
-    <ul>
-        {% for order in processedOrders %}
-            <li>
-                <h2>Commande #{{ order.numCommande }}</h2>
-                <p>Nom du destinataire : {{ order.nomDestinataire }}</p>
-                <p>Adresse de livraison : {{ order.adresseLivraison }}</p>
-                <p>Pays de livraison : {{ order.paysLivraison }}</p>
-                <p>Code postal : {{ order.codePostal }}</p>
-                <p>Ville de livraison : {{ order.villeLivraison }}</p>
-                <h3>Articles :</h3>
-                <ul>
-                    {% for itemKey, itemDescription in order.items %}
-                        <li>
-                            {{ itemKey }}: {{ itemDescription }}
-                        </li>
-                    {% endfor %}
-                </ul>
-                {# Add other fields you want to display here #}
-            </li>
-        {% endfor %}
-    </ul>
-    <form action="{{ path('get_new_orders') }}" method="get">
-        <button type="submit">Déclencher le flow orders_to_csv</button>
-    </form>
+    <div class="container mt-5">
+        <h1 class="mb-4">Liste des Commandes</h1>
+        <ul class="list-group">
+            {% for order in processedOrders %}
+                <li class="list-group-item">
+                    <h2 class="mb-3">Commande #{{ order.numCommande }}</h2>
+                    <p><strong>Nom du destinataire:</strong> {{ order.nomDestinataire }}</p>
+                    <p><strong>Adresse de livraison:</strong> {{ order.adresseLivraison }}</p>
+                    <p><strong>Pays de livraison:</strong> {{ order.paysLivraison }}</p>
+                    <p><strong>Code postal:</strong> {{ order.codePostal }}</p>
+                    <p><strong>Ville de livraison:</strong> {{ order.villeLivraison }}</p>
+                    <h3 class="mt-3">Articles :</h3>
+                    <ul>
+                        {% for itemKey, itemDescription in order.items %}
+                            <li>{{ itemKey }}: {{ itemDescription }}</li>
+                        {% endfor %}
+                    </ul>
+                </li>
+            {% endfor %}
+        </ul>
+        <form action="{{ path('get_new_orders') }}" method="get">
+            <button type="submit" class="btn btn-primary mt-4">Déclencher le flow orders_to_csv</button>
+        </form>
+        <div>
+            <a href="{{ path('home') }}" class="btn btn-danger">Accueil</a>
+        </div>
+    </div>
 {% endblock %}

@@ -1,14 +1,45 @@
 {% extends 'base.html.twig' %}
 
+{% block title %}Accueil{% endblock %}
+
 {% block body %}
+<div class="container-fluid bg-light py-5">
     <div class="container">
-        <div style="margin-bottom:40px;">
-            <h1>Bienvenue sur la page d'accueil</h1>
+        <div class="row">
+            <div class="col-md-8 mx-auto text-center">
+                <h1 class="display-4">Bienvenue sur Quanticfy</h1>
+                <p class="lead">Votre solution pour la gestion des commandes</p>
+            </div>
         </div>
-        <div>
-            <a href="{{ path('list_orders') }}" class="btn btn-primary">Voir les commandes traitées</a>
-            <a href="{{ path('get_new_orders') }}" class="btn btn-success">Récupérer les nouvelles commandes</a>
-            <a href="{{ path('app_analytics') }}" class="btn btn-warning">Analytiques</a>
+        <div class="row mt-5 text-center">
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h2 class="card-title">Voir les commandes traitées</h2>
+                        <p class="card-text">Consultez la liste des commandes déjà gérées par Quanticfy.</p>
+                        <a href="{{ path('list_orders') }}" class="btn btn-primary">Voir les commandes</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h2 class="card-title">Récupérer les nouvelles commandes</h2>
+                        <p class="card-text">Obtenez les dernières commandes en provenance de votre e-commerce.</p>
+                        <a href="{{ path('get_new_orders') }}" class="btn btn-success">Récupérer les commandes</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h2 class="card-title">Analytiques</h2>
+                        <p class="card-text">Accédez aux données analytiques de votre entreprise.</p>
+                        <a href="{{ path('app_analytics') }}" class="btn btn-warning">Accéder aux analytiques</a>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
+</div>
 {% endblock %}

@@ -40,15 +40,26 @@ class CommerceApiClient implements ICommerceApiClient
                     'delivery_zipcode' => $orderData['DeliveryZipCode'],
                     'delivery_city' => $orderData['DeliveryCity'],
                     'items_count' => count($orderData['SalesOrderLines']['results']),
-                    'item_index' => 0, // Replace with actual item index
-                    'item_id' => 0, // Replace with actual item ID
-                    'item_quantity' => 0, // Replace with actual item quantity
-                    'line_price_excl_vat' => 0.0, // Replace with actual price
-                    'line_price_incl_vat' => 0.0, // Replace with actual price
+                    // Initialize empty arrays for item-related data
+                    'items' => [],
                 ];
-
-                $newOrders[] = $newOrder;
-            }
+            
+                // Iterate through the sales order lines and populate the 'items' array
+                foreach ($orderData['SalesOrderLines']['results'] as $salesOrderLineData) {
+                    $item = [
+                        'item_index' => $salesOrderLineData['ItemIndex'], // Replace with actual item index
+                        'item_id' => $salesOrderLineData['ItemID'], // Replace with actual item ID
+                        'item_quantity' => $salesOrderLineData['ItemQuantity'], // Replace with actual item quantity
+                        'line_price_excl_vat' => $salesOrderLineData['LinePriceExclVAT'], // Replace with actual price  
+                        'line_price_incl_vat' => $salesOrderLineData['LinePriceInclVAT'], // Replace with actual price
+                    ];
+            
+                    // Add the item to the 'items' array
+                    $newOrder['items'][] = $item;
+                }
+            
+                // Further processing or storing $newOrder goes here
+            }            
 
             return $newOrders;
         } catch (\Exception $e) {
